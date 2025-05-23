@@ -103,9 +103,11 @@ export default function AttemptQuiz() {
                   <input
                     type="radio"
                     name={`question-${q.id}`}
-                    value={opt}
-                    checked={answers[q.id.toString()] === opt}
-                    onChange={() => handleChange(q.id.toString(), opt)}
+                    value={key.slice(-1)} // "a", "b", "c", or "d"
+                    checked={answers[q.id.toString()] === key.slice(-1)}
+                    onChange={() =>
+                      handleChange(q.id.toString(), key.slice(-1))
+                    }
                     className="mr-2"
                   />
                   {opt}
