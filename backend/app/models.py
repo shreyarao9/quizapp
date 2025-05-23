@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, ForeignKey, Boolean, DateTime
+from sqlalchemy import Column, Integer, String, ForeignKey, Boolean
 from sqlalchemy.orm import relationship
 from .database import Base
 
@@ -37,7 +37,26 @@ class Question(Base):
 
 class Attempt(Base):
     __tablename__ = "attempts"
-    id = Column(Integer, primary_key=True)
+    id = Column(Integer, primary_key=True, index=True)
     user_id = Column(Integer, ForeignKey("users.id"))
     quiz_id = Column(Integer, ForeignKey("quizzes.id"))
     score = Column(Integer)
+    total = Column(Integer)
+
+    user = relationship("User")
+    quiz = relationship("Quiz")
+
+
+class Answer(Base):
+    __tablename__ = "answers"
+    id = Column(Integer, primary_key=True, index=True)
+    attempt_id = Column(Integer, ForeignKey("attempts.id"))
+    question_id = Column(Integer, ForeignKey("questions.id"))
+    selected_option = Column(String)
+
+    attempt = relationship("Attempt", back_populates="answers")
+    question = relationship("Question")
+
+
+Attempt.answers = relationship(
+    "Answer", back_populates="attempt", cascade="all, delete-orphan")
