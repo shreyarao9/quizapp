@@ -13,12 +13,26 @@ type QuestionInput = {
   correct_option: "a" | "b" | "c" | "d" | "";
 };
 
+type BackendQuiz = {
+  id: number;
+  title: string;
+  description: string;
+};
+
+type BackendQuestion = {
+  id: number;
+  text: string;
+  option_a: string | null;
+  option_b: string | null;
+  option_c: string | null;
+  option_d: string | null;
+};
+
 export default function EditQuizPage() {
   const router = useRouter();
   const pathname = usePathname();
   const { token } = useAuth();
 
-  // Extract quiz_id from URL path `/admin/edit/[id]`
   const quizId = pathname.split("/").pop() || "";
 
   const [title, setTitle] = useState("");
@@ -30,22 +44,20 @@ export default function EditQuizPage() {
 
     const fetchQuizData = async () => {
       try {
-        // Fetch all quizzes
         const quizListRes = await fetch(
           `${process.env.NEXT_PUBLIC_API_URL}/quizzes/`,
           {
             headers: { Authorization: `Bearer ${token}` },
           },
         );
-        const quizzes = await quizListRes.json();
+        const quizzes: BackendQuiz[] = await quizListRes.json();
 
-        const quizMeta = quizzes.find((q: any) => q.id === parseInt(quizId));
+        const quizMeta = quizzes.find((q) => q.id === parseInt(quizId));
         if (quizMeta) {
           setTitle(quizMeta.title);
           setDescription(quizMeta.description);
         }
 
-        // Fetch questions for the specific quiz
         const questionsRes = await fetch(
           `${process.env.NEXT_PUBLIC_API_URL}/quizzes/${quizId}/questions`,
           {
@@ -53,16 +65,16 @@ export default function EditQuizPage() {
           },
         );
 
-        const questionsData = await questionsRes.json();
+        const questionsData: BackendQuestion[] = await questionsRes.json();
 
         setQuestions(
-          questionsData.map((q: any) => ({
+          questionsData.map((q) => ({
             text: q.text,
             option_a: q.option_a ?? "",
             option_b: q.option_b ?? "",
             option_c: q.option_c ?? "",
             option_d: q.option_d ?? "",
-            correct_option: "", // left empty since not provided by backend
+            correct_option: "",
           })),
         );
       } catch (error) {
@@ -72,13 +84,14 @@ export default function EditQuizPage() {
 
     fetchQuizData();
   }, [quizId, token]);
-  const handleQuestionChange = (
+
+  const handleQuestionChange = <K extends keyof QuestionInput>(
     index: number,
-    field: keyof QuestionInput,
-    value: string,
+    field: K,
+    value: QuestionInput[K],
   ) => {
     const updated = [...questions];
-    updated[index][field] = value as any;
+    updated[index] = { ...updated[index], [field]: value };
     setQuestions(updated);
   };
 
@@ -104,7 +117,7 @@ export default function EditQuizPage() {
     const payload = {
       title,
       description,
-      time_limit: 0, // ignored
+      time_limit: 0,
       questions,
     };
 
@@ -167,7 +180,7 @@ export default function EditQuizPage() {
           />
 
           {(["a", "b", "c", "d"] as const).map((letter) => {
-            const key = `option_${letter}` as const;
+            const key = `option_${letter}` as keyof QuestionInput;
             return (
               <input
                 key={key}
@@ -185,7 +198,11 @@ export default function EditQuizPage() {
             <select
               value={q.correct_option}
               onChange={(e) =>
-                handleQuestionChange(i, "correct_option", e.target.value)
+                handleQuestionChange(
+                  i,
+                  "correct_option",
+                  e.target.value as QuestionInput["correct_option"],
+                )
               }
               className="ml-2 border px-2 py-1"
             >
@@ -198,6 +215,7 @@ export default function EditQuizPage() {
           </label>
         </div>
       ))}
+
       <button
         onClick={addQuestion}
         className="bg-gray-500 text-white px-4 py-2 rounded mr-4"
