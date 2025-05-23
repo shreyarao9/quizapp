@@ -136,6 +136,7 @@ def update_quiz(quiz_id: int, updated: schemas.QuizCreate,
 
 @router.delete("/{quiz_id}", status_code=status.HTTP_204_NO_CONTENT)
 def delete_quiz(quiz_id: int, db: Session = Depends(database.get_db), admin=Depends(get_current_admin)):
+    db.query(models.Attempt).filter(models.Attempt.quiz_id == quiz_id).delete()
     db.query(models.Quiz).filter(models.Quiz.id == quiz_id).delete()
     db.commit()
 

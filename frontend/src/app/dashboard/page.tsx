@@ -42,11 +42,28 @@ export default function UserDashboard() {
         {quizzes.map((quiz) => (
           <div
             key={quiz.id}
-            className="border rounded p-4 hover:shadow-md cursor-pointer"
-            onClick={() => router.push(`/quiz/${quiz.id}`)}
+            className="border rounded p-4 hover:shadow-md space-y-2"
           >
             <h2 className="text-lg font-bold">{quiz.title}</h2>
             <p className="text-sm text-gray-600">{quiz.description}</p>
+            <div className="flex gap-2">
+              <button
+                onClick={() =>
+                  router.push(
+                    `/quiz/${quiz.id}?title=${encodeURIComponent(quiz.title)}`,
+                  )
+                }
+                className="px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700"
+              >
+                Attempt Quiz
+              </button>
+              <button
+                onClick={() => router.push(`/leaderboard/${quiz.id}`)}
+                className="px-3 py-1 bg-purple-600 text-white rounded hover:bg-purple-700"
+              >
+                View Leaderboard
+              </button>
+            </div>
           </div>
         ))}
       </div>

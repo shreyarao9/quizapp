@@ -80,6 +80,16 @@ export default function AdminDashboard() {
               >
                 Delete
               </button>
+              <button
+                onClick={() =>
+                  router.push(
+                    `/leaderboard/${quiz.id}?title=${encodeURIComponent(quiz.title)}`,
+                  )
+                }
+                className="text-purple-600 hover:underline"
+              >
+                View Leaderboard
+              </button>
             </div>
           </div>
         ))}

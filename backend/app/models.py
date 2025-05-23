@@ -33,6 +33,8 @@ class Question(Base):
     option_d = Column(String, nullable=True)
     correct_option = Column(String, nullable=False)  # 'a', 'b', 'c', 'd'
     quiz = relationship("Quiz", back_populates="questions")
+    answers = relationship(
+        "Answer", back_populates="question", cascade="all, delete")
 
 
 class Attempt(Base):
@@ -55,7 +57,7 @@ class Answer(Base):
     selected_option = Column(String)
 
     attempt = relationship("Attempt", back_populates="answers")
-    question = relationship("Question")
+    question = relationship("Question", back_populates="answers")
 
 
 Attempt.answers = relationship(
