@@ -1,20 +1,20 @@
-import os
+# import os
 from fastapi.middleware.cors import CORSMiddleware
-from dotenv import load_dotenv
+# from dotenv import load_dotenv
 from fastapi import FastAPI
 from fastapi.openapi.utils import get_openapi
 from .routers import users, quizzes
 from .database import Base, engine
 
-load_dotenv()  # Load variables from .env
+# load_dotenv()  # Load variables from .env
 
-origins = os.getenv("ALLOWED_ORIGINS", "").split(",")
+# origins = os.getenv("ALLOWED_ORIGINS", "").split(",")
 
 app = FastAPI()
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[origin.strip() for origin in origins],
+    allow_origins=["*"],  # [origin.strip() for origin in origins],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

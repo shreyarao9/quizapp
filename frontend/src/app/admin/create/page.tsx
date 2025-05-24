@@ -119,10 +119,18 @@ export default function CreateQuizPage() {
             }
           >
             <option value="">Select Correct Answer</option>
-            <option value="a">Option A</option>
-            <option value="b">Option B</option>
-            <option value="c">Option C</option>
-            <option value="d">Option D</option>
+            <option value="a" className="text-black">
+              Option A
+            </option>
+            <option value="b" className="text-black">
+              Option B
+            </option>
+            <option value="c" className="text-black">
+              Option C
+            </option>
+            <option value="d" className="text-black">
+              Option D
+            </option>
           </select>
         </div>
       ))}

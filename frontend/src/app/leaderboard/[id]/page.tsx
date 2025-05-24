@@ -47,7 +47,7 @@ export default function LeaderboardPage() {
       ) : (
         <table className="w-full text-left border">
           <thead>
-            <tr className="bg-gray-100">
+            <tr className="bg-gray-100 text-black">
               <th className="p-2 border">User ID</th>
               <th className="p-2 border">Score</th>
             </tr>

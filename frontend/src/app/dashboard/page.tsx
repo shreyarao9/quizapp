@@ -24,7 +24,8 @@ export default function UserDashboard() {
   useEffect(() => {
     if (!token) return;
     const fetchQuizzes = async () => {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/quizzes/`, {
+      const url = `api/quizzes/`;
+      const res = await fetch(url, {
         headers: {
           Authorization: `Bearer ${token}`,
         },

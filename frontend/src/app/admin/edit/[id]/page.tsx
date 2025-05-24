@@ -207,10 +207,18 @@ export default function EditQuizPage() {
               className="ml-2 border px-2 py-1"
             >
               <option value="">Select correct option</option>
-              <option value="a">A</option>
-              <option value="b">B</option>
-              <option value="c">C</option>
-              <option value="d">D</option>
+              <option value="a" className="text-black">
+                A
+              </option>
+              <option value="b" className="text-black">
+                B
+              </option>
+              <option value="c" className="text-black">
+                C
+              </option>
+              <option value="d" className="text-black">
+                D
+              </option>
             </select>
           </label>
         </div>
